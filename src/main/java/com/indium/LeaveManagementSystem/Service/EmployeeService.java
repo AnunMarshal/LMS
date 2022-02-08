@@ -1,13 +1,17 @@
 package com.indium.LeaveManagementSystem.Service;
 
 import com.indium.LeaveManagementSystem.DTO.EmployeeDetailsDto;
+import com.indium.LeaveManagementSystem.DTO.EmployeeLeaveBalanceDTO;
+import com.indium.LeaveManagementSystem.Model.EmployeeLeaveBalance;
 import com.indium.LeaveManagementSystem.Repository.EmployeeDetailsRepository;
+import com.indium.LeaveManagementSystem.Repository.EmployeeLeaveBalanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.*;
 import java.util.Optional;
 
 @Service
@@ -15,6 +19,8 @@ public class EmployeeService {
     private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class.getName());
     @Autowired
     private EmployeeDetailsRepository repository;
+    @Autowired
+    private EmployeeLeaveBalanceRepository elbRepository;
 
 
     public EmployeeDetailsDto createEmployeeDetails(EmployeeDetailsDto employeeDetailsRequest) {
@@ -117,5 +123,32 @@ public class EmployeeService {
 
         return response;
     }
+    public EmployeeLeaveBalanceDTO createEmployeeLeaveBalance(EmployeeLeaveBalance employeeLeaveBalance) {
+        EmployeeLeaveBalanceDTO response = new EmployeeLeaveBalanceDTO();
+        EmployeeLeaveBalance balance = new EmployeeLeaveBalance();
+        balance.setEmpId(employeeLeaveBalance.getEmpId());
+        balance.setLeaveTypeId(employeeLeaveBalance.getLeaveTypeId());
+        balance.setLeaveAvailability(employeeLeaveBalance.getLeaveAvailability());
+        balance.setCreatedAt(System.currentTimeMillis());
+        elbRepository.save(balance);
+        return  response;
+    }
+    public List<EmployeeLeaveBalance> getLeaveBalance() {
+        List<EmployeeLeaveBalance> elb = new ArrayList<>();
+        elbRepository.findAll().forEach(elb::add);
+        return elb;
+    }
+    public EmployeeLeaveBalance getLeaveBalanceById(int id) {  //get based on id
+        return elbRepository.findById(id).orElse(null);
+    }
+    public EmployeeLeaveBalance updateLeaveBalance(EmployeeLeaveBalance leaveBalance){
+        elbRepository.save(leaveBalance);
+        return leaveBalance;
+    }
+    public void deleteLeaveBalance(int id) {
+        elbRepository.deleteById(id);
+    }
+
 
 }
+
