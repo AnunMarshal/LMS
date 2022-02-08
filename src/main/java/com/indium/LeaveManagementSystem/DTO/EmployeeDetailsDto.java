@@ -3,13 +3,12 @@ package com.indium.LeaveManagementSystem.DTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeDetailsResponse {
+public class EmployeeDetailsDto {
 
     private int empId;
     private String name;
@@ -25,6 +24,5 @@ public class EmployeeDetailsResponse {
         Date d = new Date(createdAt);
         this.createdAt = d;
     }
-
 
 }

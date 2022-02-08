@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 @Data
 @NoArgsConstructor
@@ -18,7 +15,8 @@ public class EmployeeDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int empId;
     private String name;
-    private String roleId;
+    
+    private String roleId;   //foreign key relation with roles table ,type should be roles object onetomany relationship
     private String address;
     private String phone;
     private String email;
