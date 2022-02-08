@@ -1,22 +1,29 @@
 package com.indium.LeaveManagementSystem.Service;
 
 import com.indium.LeaveManagementSystem.DTO.LeaveTypeDto;
+import com.indium.LeaveManagementSystem.Model.EmployeeLeaveDetail;
 import com.indium.LeaveManagementSystem.Model.LeaveType;
+import com.indium.LeaveManagementSystem.Repository.EmployeeLeaveDetailRepository;
 import com.indium.LeaveManagementSystem.Repository.LeaveTypeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.indium.LeaveManagementSystem.DTO.*;
 
+import java.io.IOException;
 import java.util.Optional;
 
 
 @Service
 public class LeaveService {
 
-    private static final Logger logger = LoggerFactory.getLogger(LeaveService.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(LeaveService.class.getName());
     @Autowired
     LeaveTypeRepository leaveTypeRepository;
+
+    @Autowired
+    private EmployeeLeaveDetailRepository eldrepository;
 
     public LeaveTypeDto createLeaveType(LeaveTypeDto leaveTypeRequest) {
 
@@ -104,5 +111,54 @@ public class LeaveService {
         return response;
     }
 
+    public EmployeeLeaveDetailResponse createEmployeeLeaveDetail(EmployeeLeaveDetailRequest employeeLeaveDetailRequest) {
+        EmployeeLeaveDetailResponse response = new EmployeeLeaveDetailResponse();
+        EmployeeLeaveDetail employeeLeaveDetail=new EmployeeLeaveDetail();
+
+        if(employeeLeaveDetailRequest != null) {
+
+            log.info("fromdate*"+employeeLeaveDetailRequest.getFromDate());
+            // employeeLeaveDetail.setId(employeeLeaveDetailRequest.getId());
+            employeeLeaveDetail.setEmpId(employeeLeaveDetailRequest.getEmpId());
+            employeeLeaveDetail.setManagerId(employeeLeaveDetailRequest.getManagerId());
+            employeeLeaveDetail.setLeaveType(employeeLeaveDetailRequest.getLeaveType());
+            employeeLeaveDetail.setFromDate(employeeLeaveDetailRequest.getFromDate());
+            employeeLeaveDetail.setToDate(employeeLeaveDetailRequest.getToDate());
+            employeeLeaveDetail.setNoofDays(employeeLeaveDetailRequest.getNoofDays());
+            employeeLeaveDetail.setReason(employeeLeaveDetailRequest.getReason());
+            employeeLeaveDetail.setCreatedAt(System.currentTimeMillis());
+            eldrepository.save(employeeLeaveDetail);
+            log.info("Employee Leave Details " + employeeLeaveDetail);
+            log.info("Employee Leave Details " + employeeLeaveDetail.getEmpId());
+            response.setStatus("Successfully Added");
+
+        }else{
+            response.setStatus("Data is Null");
+        }
+        return response;
+    }
+
+    public EmployeeLeaveDetailResponse getEmployeeLeaveDetailByID(int id) throws IOException {
+        EmployeeLeaveDetailResponse response= new EmployeeLeaveDetailResponse();
+
+        Optional<EmployeeLeaveDetail> result= eldrepository.findById(id);
+        log.info("***-->"+result.get().toString());
+
+        if(result.get() != null) {
+            // response.setId(result.get().getId());
+            response.setEmpId(result.get().getEmpId());
+            response.setManagerId(result.get().getManagerId());
+            response.setLeaveType(result.get().getLeaveType());
+            response.setFromDate(result.get().getFromDate());
+            response.setToDate(result.get().getToDate());
+            response.setNoofDays(result.get().getNoofDays());
+            response.setReason(result.get().getReason());
+            response.setCreatedAt(System.currentTimeMillis());
+
+        }else{
+            response.setStatus("Data is Null");
+        }
+        return response;
+    }
 
 }

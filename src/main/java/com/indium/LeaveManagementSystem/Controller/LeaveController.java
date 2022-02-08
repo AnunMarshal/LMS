@@ -1,6 +1,8 @@
 package com.indium.LeaveManagementSystem.Controller;
 
 import com.indium.LeaveManagementSystem.DTO.EmployeeDetailsDto;
+import com.indium.LeaveManagementSystem.DTO.EmployeeLeaveDetailRequest;
+import com.indium.LeaveManagementSystem.DTO.EmployeeLeaveDetailResponse;
 import com.indium.LeaveManagementSystem.DTO.LeaveTypeDto;
 import com.indium.LeaveManagementSystem.Service.LeaveService;
 import org.slf4j.Logger;
@@ -13,7 +15,7 @@ import java.io.IOException;
 @RestController
 public class LeaveController {
 
-    private static final Logger LOGGER= LoggerFactory.getLogger(LeaveController.class.getName());
+    private static final Logger log= LoggerFactory.getLogger(LeaveController.class.getName());
     @Autowired
     LeaveService leaveTypeService;
 
@@ -35,6 +37,20 @@ public class LeaveController {
     @GetMapping("/deleteLeaveType/{id}")
     public LeaveTypeDto deleteLeaveType(@PathVariable int id){
         return leaveTypeService.deleteLeaveType(id);
+    }
+
+
+
+    @PostMapping("/addEmployeeLeaveDetail")
+    public EmployeeLeaveDetailResponse addEmployeeLeaveDetail(@RequestBody EmployeeLeaveDetailRequest employeeLeaveDetailRequest) {
+        log.info("Add the EmployeeLeavedetail");
+        return leaveTypeService.createEmployeeLeaveDetail(employeeLeaveDetailRequest);
+    }
+    @GetMapping("/employeeLeaveDetail/{id}")
+    public EmployeeLeaveDetailResponse getEmployeeLeaveDetailByID(@PathVariable int id) throws IOException {
+        log.info("");
+
+        return leaveTypeService.getEmployeeLeaveDetailByID(id);
     }
 
 }
