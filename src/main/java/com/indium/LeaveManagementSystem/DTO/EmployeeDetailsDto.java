@@ -1,5 +1,6 @@
 package com.indium.LeaveManagementSystem.DTO;
 
+import com.indium.LeaveManagementSystem.Model.Roles;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ public class EmployeeDetailsDto {
 
     private int empId;
     private String name;
-    private String role;
+    private Roles roles;
     private String address;
     private String phone;
     private String email;

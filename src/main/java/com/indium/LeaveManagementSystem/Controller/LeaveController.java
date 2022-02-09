@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 public class LeaveController {
@@ -24,9 +25,14 @@ public class LeaveController {
         return leaveTypeService.createLeaveType(leaveType);
     }
 
-    @GetMapping("/leaveType/{id}")
+    @GetMapping("/getLeaveType/{id}")
     public LeaveTypeDto getLeaveTypeByID(@PathVariable int id) throws IOException {
         return leaveTypeService.getLeaveTypeByID(id);
+    }
+
+    @GetMapping("/getLeaveTypes")
+    public List<LeaveTypeDto> getLeaveTypes() throws IOException {
+        return leaveTypeService.getLeaveTypes();
     }
 
     @PostMapping("/updateLeaveType")

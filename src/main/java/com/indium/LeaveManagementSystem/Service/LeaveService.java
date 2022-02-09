@@ -1,6 +1,7 @@
 package com.indium.LeaveManagementSystem.Service;
 
 import com.indium.LeaveManagementSystem.DTO.LeaveTypeDto;
+import com.indium.LeaveManagementSystem.Model.EmployeeDetails;
 import com.indium.LeaveManagementSystem.Model.EmployeeLeaveDetail;
 import com.indium.LeaveManagementSystem.Model.LeaveType;
 import com.indium.LeaveManagementSystem.Repository.EmployeeLeaveDetailRepository;
@@ -12,7 +13,10 @@ import org.springframework.stereotype.Service;
 import com.indium.LeaveManagementSystem.DTO.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -57,12 +61,43 @@ public class LeaveService {
             response.setType(result.get().getType());
 
             response.setStatus(result.get().getStatus());
+            response.setCreatedAt(result.get().getCreatedAt().getTime());
+
 
         }else{
             response.setStatus("Error while getting details");
         }
         return response;
     }
+
+
+    public List<LeaveTypeDto> getLeaveTypes(){
+        List<LeaveTypeDto> response =new ArrayList<LeaveTypeDto>();
+
+        List<LeaveType>  leaveTypeList=leaveTypeRepository.findAll().stream().filter(e->
+                !e.getStatus().equals("Deleted")).collect(Collectors.toList());
+
+        log.info("************7 "+leaveTypeList.toString());
+
+
+        for(LeaveType leaveType:leaveTypeList) {
+            LeaveTypeDto leaveTypeDto = new LeaveTypeDto();
+
+            log.info("EmpId ******* " + leaveTypeDto.getId());
+
+            leaveTypeDto.setId(leaveType.getId());
+            leaveTypeDto.setType(leaveType.getType());
+            leaveTypeDto.setStatus(leaveType.getStatus());
+            leaveTypeDto.setCreatedAt(leaveType.getCreatedAt().getTime());
+
+            log.info("leaveTypeDto ********* " + leaveTypeDto.toString());
+
+            response.add(leaveTypeDto);
+            }
+
+        return response;
+    }
+
 
     public LeaveTypeDto updateLeaveType(LeaveTypeDto leaveTypeDto){
         LeaveTypeDto response = new LeaveTypeDto();
@@ -73,7 +108,8 @@ public class LeaveService {
 
             leaveType.setId(leaveTypeDto.getId());
             leaveType.setType(leaveTypeDto.getType());
-            leaveType.setCreatedAt(System.currentTimeMillis());
+            leaveType.setUpdatedAt(System.currentTimeMillis());
+            leaveType.setCreatedAt(result.get().getCreatedAt().getTime());
             leaveType.setStatus("Active");
 
             leaveTypeRepository.save(leaveType);
@@ -98,7 +134,8 @@ public class LeaveService {
 
             leaveType.setId(result.get().getId());
             leaveType.setType(result.get().getType());
-            leaveType.setCreatedAt(System.currentTimeMillis());
+            leaveType.setCreatedAt(result.get().getCreatedAt().getTime());
+            leaveType.setUpdatedAt(System.currentTimeMillis());
             leaveType.setStatus("Deleted");
 
             leaveTypeRepository.save(leaveType);

@@ -15,8 +15,8 @@ public class EmployeeDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int empId;
     private String name;
-    
-    private String roleId;   //foreign key relation with roles table ,type should be roles object onetomany relationship
+    @OneToOne @JoinColumn(name="roles")
+    private Roles roles;
     private String address;
     private String phone;
     private String email;

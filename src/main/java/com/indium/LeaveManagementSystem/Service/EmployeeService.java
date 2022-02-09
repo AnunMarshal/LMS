@@ -2,9 +2,11 @@ package com.indium.LeaveManagementSystem.Service;
 
 import com.indium.LeaveManagementSystem.DTO.EmployeeDetailsDto;
 import com.indium.LeaveManagementSystem.DTO.EmployeeLeaveBalanceDTO;
+import com.indium.LeaveManagementSystem.Model.EmployeeDetails;
 import com.indium.LeaveManagementSystem.Model.EmployeeLeaveBalance;
 import com.indium.LeaveManagementSystem.Repository.EmployeeDetailsRepository;
 import com.indium.LeaveManagementSystem.Repository.EmployeeLeaveBalanceRepository;
+import com.indium.LeaveManagementSystem.utils.MessageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
@@ -13,10 +15,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.*;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
-    private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(EmployeeService.class.getName());
     @Autowired
     private EmployeeDetailsRepository repository;
     @Autowired
@@ -30,7 +33,7 @@ public class EmployeeService {
        if(employeeDetailsRequest != null) {
 
            employeeDetails.setName(employeeDetailsRequest.getName());
-           //employeeDetails.setRoleId(employeeDetailsRequest.getRole());
+           employeeDetails.setRoles(employeeDetailsRequest.getRoles());
            employeeDetails.setAddress(employeeDetailsRequest.getAddress());
            employeeDetails.setPhone(employeeDetailsRequest.getPhone());
            employeeDetails.setEmail(employeeDetailsRequest.getEmail());
@@ -50,18 +53,17 @@ public class EmployeeService {
     public EmployeeDetailsDto getEmployeeDetailsByID(int id) throws IOException {
 
         EmployeeDetailsDto response= new EmployeeDetailsDto();
-        Optional<com.indium.LeaveManagementSystem.Model.EmployeeDetails> result= repository.findById(id);
-        logger.info("***-->"+result.get().toString());
+        Optional<EmployeeDetails> result= repository.findById(id);
 
-        if(result.isPresent() && !result.get().getStatus().equals("Deleted")) {
+        if(result.isPresent() && !result.get().getStatus().equals(MessageConstants.DELETED)) {
             response.setEmpId(result.get().getEmpId());
             response.setName(result.get().getName());
-            //response.setRole(result.get().getRoleId());
+            response.setRoles(result.get().getRoles());
             response.setAddress(result.get().getAddress());
             response.setPhone(result.get().getPhone());
             response.setEmail(result.get().getEmail());
-
             response.setStatus(result.get().getStatus());
+            response.setCreatedAt(result.get().getCreatedAt().getTime());
 
         }else{
             response.setStatus("Error while getting details");
@@ -69,21 +71,51 @@ public class EmployeeService {
         return response;
     }
 
-    public EmployeeDetailsDto updateEmployeeDetails(EmployeeDetailsDto employeeDetailsRequest){
+    public List<EmployeeDetailsDto> getEmployeeDetails(){
+        List<EmployeeDetailsDto> response =new ArrayList<EmployeeDetailsDto>();
+
+        List<EmployeeDetails>  employeeDetailsList=repository.findAll().stream().filter(e->
+                !e.getStatus().equals(MessageConstants.DELETED)).collect(Collectors.toList());
+
+        log.info("************7 "+employeeDetailsList.toString());
+
+
+        for(EmployeeDetails employeeDetails:employeeDetailsList){
+
+            EmployeeDetailsDto employeeDetailsDto=new EmployeeDetailsDto();
+            log.info("EmpId ******* "+employeeDetails.getEmpId());
+            employeeDetailsDto.setEmpId(employeeDetails.getEmpId());
+            employeeDetailsDto.setName(employeeDetails.getName());
+            employeeDetailsDto.setRoles(employeeDetails.getRoles());
+            employeeDetailsDto.setAddress(employeeDetails.getAddress());
+            employeeDetailsDto.setPhone(employeeDetails.getPhone());
+            employeeDetailsDto.setEmail(employeeDetails.getEmail());
+            employeeDetailsDto.setStatus(employeeDetails.getStatus());
+
+            log.info("employeeDetailsDto ********* "+employeeDetailsDto.toString());
+            response.add(employeeDetailsDto);
+
+        }
+        return response;
+    }
+
+
+    public EmployeeDetailsDto updateEmployeeDetails(EmployeeDetailsDto employeeDetailsDto){
 
         EmployeeDetailsDto response = new EmployeeDetailsDto();
-        com.indium.LeaveManagementSystem.Model.EmployeeDetails employeeDetails=new com.indium.LeaveManagementSystem.Model.EmployeeDetails();
-        Optional<com.indium.LeaveManagementSystem.Model.EmployeeDetails> result= repository.findById(employeeDetailsRequest.getEmpId());
+        EmployeeDetails employeeDetails=new EmployeeDetails();
+        Optional<EmployeeDetails> result= repository.findById(employeeDetailsDto.getEmpId());
 
-        if(result.isPresent() && !result.get().getStatus().equals("Deleted")) {
+        if(result.isPresent() && !result.get().getStatus().equals(MessageConstants.DELETED)) {
 
-            employeeDetails.setEmpId(employeeDetailsRequest.getEmpId());
-            employeeDetails.setName(employeeDetailsRequest.getName());
-            //employeeDetails.setRoleId(employeeDetailsRequest.getRole());
-            employeeDetails.setAddress(employeeDetailsRequest.getAddress());
-            employeeDetails.setPhone(employeeDetailsRequest.getPhone());
-            employeeDetails.setEmail(employeeDetailsRequest.getEmail());
-
+            employeeDetails.setEmpId(employeeDetailsDto.getEmpId());
+            employeeDetails.setName(employeeDetailsDto.getName());
+            employeeDetails.setRoles(employeeDetailsDto.getRoles());
+            employeeDetails.setAddress(employeeDetailsDto.getAddress());
+            employeeDetails.setPhone(employeeDetailsDto.getPhone());
+            employeeDetails.setEmail(employeeDetailsDto.getEmail());
+            employeeDetails.setUpdatedAt(System.currentTimeMillis());
+            employeeDetails.setCreatedAt(result.get().getCreatedAt().getTime());
             employeeDetails.setStatus("Active");
 
             repository.save(employeeDetails);
@@ -99,19 +131,20 @@ public class EmployeeService {
     public EmployeeDetailsDto deleteEmployeeDetails(int id){
 
         EmployeeDetailsDto response = new EmployeeDetailsDto();
-        com.indium.LeaveManagementSystem.Model.EmployeeDetails employeeDetails=new com.indium.LeaveManagementSystem.Model.EmployeeDetails();
-        Optional<com.indium.LeaveManagementSystem.Model.EmployeeDetails> result= repository.findById(id);
+        EmployeeDetails employeeDetails=new EmployeeDetails();
+        Optional<EmployeeDetails> result= repository.findById(id);
 
-        if(result.isPresent() && !result.get().getStatus().equals("Deleted")) {
+        if(result.isPresent() && !result.get().getStatus().equals(MessageConstants.DELETED)) {
             //repository.deleteById(id);
 
             employeeDetails.setEmpId(result.get().getEmpId());
             employeeDetails.setName(result.get().getName());
-            //employeeDetails.setRoleId(result.get().getRoleId());
+            employeeDetails.setRoles(result.get().getRoles());
             employeeDetails.setAddress(result.get().getAddress());
             employeeDetails.setPhone(result.get().getPhone());
             employeeDetails.setEmail(result.get().getEmail());
-            employeeDetails.setCreatedAt(System.currentTimeMillis());
+            employeeDetails.setCreatedAt(result.get().getCreatedAt().getTime());
+            employeeDetails.setUpdatedAt(System.currentTimeMillis());
             employeeDetails.setStatus("Deleted");
 
             repository.save(employeeDetails);

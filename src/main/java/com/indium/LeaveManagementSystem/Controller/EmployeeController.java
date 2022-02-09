@@ -30,6 +30,12 @@ public class EmployeeController {
         return service.getEmployeeDetailsByID(id);
     }
 
+    @GetMapping("/getEmployeeDetails")
+    public List<EmployeeDetailsDto> getEmployeeDetails() throws IOException {
+        return service.getEmployeeDetails();
+    }
+
+
     @PostMapping("/updateEmployeeDetails")
     public EmployeeDetailsDto updateEmplyeeDetails(@RequestBody EmployeeDetailsDto employeeDetailsRequest){
         return service.updateEmployeeDetails(employeeDetailsRequest);

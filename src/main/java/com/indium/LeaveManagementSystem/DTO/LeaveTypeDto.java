@@ -16,4 +16,10 @@ public class LeaveTypeDto {
     private String Status;
     private Date createdAt;
 
+
+    public void setCreatedAt(Long createdAt) {
+        Date d = new Date(createdAt);
+        this.createdAt = d;
+    }
+
 }
