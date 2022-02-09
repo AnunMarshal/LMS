@@ -51,10 +51,11 @@ public class EmployeeController {
         LOGGER.info("in method addleaveBalance");
         return service.createEmployeeLeaveBalance(balance);
     }
-    @GetMapping("/getLeaveBalance")
-    public List<EmployeeLeaveBalance> getLeaveBalance(){
-        return service.getLeaveBalance();
-    }
+
+   @GetMapping("/getLeaveBalance")
+   public List<EmployeeLeaveBalanceDTO> getLeaveBalance(){
+       return service.getLeaveBalance();
+   }
 
     @GetMapping("/LeaveBalanceById/{id}")
     public EmployeeLeaveBalance findLeaveBalanceById(@PathVariable int id) {

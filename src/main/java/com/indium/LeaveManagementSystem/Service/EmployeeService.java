@@ -166,11 +166,27 @@ public class EmployeeService {
         elbRepository.save(balance);
         return  response;
     }
-    public List<EmployeeLeaveBalance> getLeaveBalance() {
+   public List<EmployeeLeaveBalanceDTO> getLeaveBalance(){
+       List<EmployeeLeaveBalanceDTO> dto=new ArrayList<EmployeeLeaveBalanceDTO>();
+       List<EmployeeLeaveBalance> elb=elbRepository.findAll().stream().filter(e-> !e.getStatus().equals("delete")).collect(Collectors.toList());
+
+       for(EmployeeLeaveBalance balance:elb){
+           EmployeeLeaveBalanceDTO employeeLeaveBalanceDTO=new EmployeeLeaveBalanceDTO();
+           employeeLeaveBalanceDTO.setEmpId(balance.getEmpId());
+           employeeLeaveBalanceDTO.setLeaveTypeId(balance.getLeaveTypeId());
+           employeeLeaveBalanceDTO.setLeaveAvailability(balance.getLeaveAvailability());
+           employeeLeaveBalanceDTO.setCreatedAt(balance.getCreatedAt().getTime());
+           dto.add(employeeLeaveBalanceDTO);
+
+
+       }
+       return dto;
+   }
+    /*public List<EmployeeLeaveBalance> getLeaveBalance() {
         List<EmployeeLeaveBalance> elb = new ArrayList<>();
         elbRepository.findAll().forEach(elb::add);
         return elb;
-    }
+    }*/
     public EmployeeLeaveBalance getLeaveBalanceById(int id) {  //get based on id
         return elbRepository.findById(id).orElse(null);
     }
