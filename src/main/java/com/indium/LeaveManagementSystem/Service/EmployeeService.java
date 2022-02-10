@@ -2,6 +2,7 @@ package com.indium.LeaveManagementSystem.Service;
 
 import com.indium.LeaveManagementSystem.DTO.EmployeeDetailsDto;
 import com.indium.LeaveManagementSystem.DTO.EmployeeLeaveBalanceDTO;
+import com.indium.LeaveManagementSystem.DTO.RolesDto;
 import com.indium.LeaveManagementSystem.Model.EmployeeDetails;
 import com.indium.LeaveManagementSystem.Model.EmployeeLeaveBalance;
 import com.indium.LeaveManagementSystem.Repository.EmployeeDetailsRepository;
@@ -33,7 +34,7 @@ public class EmployeeService {
        if(employeeDetailsRequest != null) {
 
            employeeDetails.setName(employeeDetailsRequest.getName());
-           employeeDetails.setRoles(employeeDetailsRequest.getRoles());
+           employeeDetails.setRoles(employeeDetailsRequest.getRolesDto());
            employeeDetails.setAddress(employeeDetailsRequest.getAddress());
            employeeDetails.setPhone(employeeDetailsRequest.getPhone());
            employeeDetails.setEmail(employeeDetailsRequest.getEmail());
@@ -54,11 +55,15 @@ public class EmployeeService {
 
         EmployeeDetailsDto response= new EmployeeDetailsDto();
         Optional<EmployeeDetails> result= repository.findById(id);
+        RolesDto rolesDto=new RolesDto();
+        rolesDto.setId(result.get().getRoles().getId());
+        rolesDto.setRoleName(result.get().getRoles().getRoleName());
+        rolesDto.setStatus(result.get().getRoles().getStatus());
 
         if(result.isPresent() && !result.get().getStatus().equals(MessageConstants.DELETED)) {
             response.setEmpId(result.get().getEmpId());
             response.setName(result.get().getName());
-            response.setRoles(result.get().getRoles());
+            response.setRolesDto(rolesDto);
             response.setAddress(result.get().getAddress());
             response.setPhone(result.get().getPhone());
             response.setEmail(result.get().getEmail());
@@ -82,15 +87,21 @@ public class EmployeeService {
 
         for(EmployeeDetails employeeDetails:employeeDetailsList){
 
+            RolesDto rolesDto=new RolesDto();
+            rolesDto.setId(employeeDetails.getRoles().getId());
+            rolesDto.setRoleName(employeeDetails.getRoles().getRoleName());
+            rolesDto.setStatus(employeeDetails.getRoles().getStatus());
+
             EmployeeDetailsDto employeeDetailsDto=new EmployeeDetailsDto();
             log.info("EmpId ******* "+employeeDetails.getEmpId());
             employeeDetailsDto.setEmpId(employeeDetails.getEmpId());
             employeeDetailsDto.setName(employeeDetails.getName());
-            employeeDetailsDto.setRoles(employeeDetails.getRoles());
+            employeeDetailsDto.setRolesDto(rolesDto);
             employeeDetailsDto.setAddress(employeeDetails.getAddress());
             employeeDetailsDto.setPhone(employeeDetails.getPhone());
             employeeDetailsDto.setEmail(employeeDetails.getEmail());
             employeeDetailsDto.setStatus(employeeDetails.getStatus());
+            employeeDetailsDto.setCreatedAt(employeeDetails.getCreatedAt().getTime());
 
             log.info("employeeDetailsDto ********* "+employeeDetailsDto.toString());
             response.add(employeeDetailsDto);
@@ -110,7 +121,7 @@ public class EmployeeService {
 
             employeeDetails.setEmpId(employeeDetailsDto.getEmpId());
             employeeDetails.setName(employeeDetailsDto.getName());
-            employeeDetails.setRoles(employeeDetailsDto.getRoles());
+            employeeDetails.setRoles(employeeDetailsDto.getRolesDto());
             employeeDetails.setAddress(employeeDetailsDto.getAddress());
             employeeDetails.setPhone(employeeDetailsDto.getPhone());
             employeeDetails.setEmail(employeeDetailsDto.getEmail());
@@ -134,12 +145,17 @@ public class EmployeeService {
         EmployeeDetails employeeDetails=new EmployeeDetails();
         Optional<EmployeeDetails> result= repository.findById(id);
 
+        RolesDto rolesDto=new RolesDto();
+        rolesDto.setId(result.get().getRoles().getId());
+        rolesDto.setRoleName(result.get().getRoles().getRoleName());
+        rolesDto.setStatus(result.get().getRoles().getStatus());
+
         if(result.isPresent() && !result.get().getStatus().equals(MessageConstants.DELETED)) {
             //repository.deleteById(id);
 
             employeeDetails.setEmpId(result.get().getEmpId());
             employeeDetails.setName(result.get().getName());
-            employeeDetails.setRoles(result.get().getRoles());
+            employeeDetails.setRoles(rolesDto);
             employeeDetails.setAddress(result.get().getAddress());
             employeeDetails.setPhone(result.get().getPhone());
             employeeDetails.setEmail(result.get().getEmail());

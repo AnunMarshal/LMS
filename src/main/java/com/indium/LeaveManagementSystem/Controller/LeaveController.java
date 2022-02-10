@@ -50,7 +50,7 @@ public class LeaveController {
     public LeaveDetailDto addLeaveDetail(@RequestBody LeaveDetailDto leavedetail) {
         return leaveTypeService.createLeaveDetail(leavedetail);
     }
-    @GetMapping("/LeaveDetail")
+    @GetMapping("/LeaveDetail/{id}")
     public LeaveDetailDto getLeaveDetailByID(@PathVariable int id) throws IOException {
         return leaveTypeService.getLeaveDetailByID(id);
     }

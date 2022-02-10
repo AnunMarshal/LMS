@@ -13,7 +13,7 @@ public class EmployeeDetailsDto {
 
     private int empId;
     private String name;
-    private Roles roles;
+    private RolesDto rolesDto;
     private String address;
     private String phone;
     private String email;

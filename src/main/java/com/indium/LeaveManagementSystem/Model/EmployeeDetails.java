@@ -1,5 +1,6 @@
 package com.indium.LeaveManagementSystem.Model;
 
+import com.indium.LeaveManagementSystem.DTO.RolesDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class EmployeeDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int empId;
     private String name;
-    @OneToOne @JoinColumn(name="roles")
+    @OneToOne @JoinColumn(name="roles_id")
     private Roles roles;
     private String address;
     private String phone;
@@ -36,4 +37,13 @@ public class EmployeeDetails {
         Date d = new Date(updatedAt);
         this.UpdatedAt = d;
     }
+
+
+    public void setRoles(RolesDto rolesDto) {
+        Roles roles=new Roles();
+        roles.setId(rolesDto.getId());
+        this.roles = roles;
+    }
+
+
 }
