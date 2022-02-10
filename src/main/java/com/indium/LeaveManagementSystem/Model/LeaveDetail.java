@@ -14,13 +14,13 @@ public class LeaveDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "fk_empId")
     private EmployeeDetails empId;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "fk_managerId")
     private EmployeeDetails managerId;
-    @OneToOne(cascade =CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "fk_leaveType")
     private LeaveType leaveType;
     private String fromDate;
