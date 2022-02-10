@@ -4,28 +4,31 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class EmployeeLeaveDetail {
+public class LeaveDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private int empId;
-    private int ManagerId;
-    private String LeaveType;
-    private String FromDate;
-    private String ToDate;
-    private int NoofDays;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_empId")
+    private EmployeeDetails empId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_managerId")
+    private EmployeeDetails managerId;
+    @OneToOne(cascade =CascadeType.ALL)
+    @JoinColumn(name = "fk_leaveType")
+    private LeaveType leaveType;
+    private String fromDate;
+    private String toDate;
+    private int noofDays;
     private String reason;
     private Date createdAt;
-    private Date UpdatedAt;
+    private Date updatedAt;
     private String Status;
     private String createdBy;
     private String updatedBy;
@@ -37,6 +40,6 @@ public class EmployeeLeaveDetail {
 
     public void setUpdatedAt(Long updatedAt) {
         Date d = new Date(updatedAt);
-        this.UpdatedAt = d;
+        this.updatedAt = d;
     }
 }

@@ -1,13 +1,12 @@
 package com.indium.LeaveManagementSystem.Controller;
 
-import com.indium.LeaveManagementSystem.DTO.EmployeeDetailsDto;
-import com.indium.LeaveManagementSystem.DTO.EmployeeLeaveDetailRequest;
-import com.indium.LeaveManagementSystem.DTO.EmployeeLeaveDetailResponse;
+import com.indium.LeaveManagementSystem.DTO.LeaveDetailDto;
 import com.indium.LeaveManagementSystem.DTO.LeaveTypeDto;
 import com.indium.LeaveManagementSystem.Service.LeaveService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -45,18 +44,22 @@ public class LeaveController {
         return leaveTypeService.deleteLeaveType(id);
     }
 
+//============================================================================================
 
-
-    @PostMapping("/addEmployeeLeaveDetail")
-    public EmployeeLeaveDetailResponse addEmployeeLeaveDetail(@RequestBody EmployeeLeaveDetailRequest employeeLeaveDetailRequest) {
-        log.info("Add the EmployeeLeavedetail");
-        return leaveTypeService.createEmployeeLeaveDetail(employeeLeaveDetailRequest);
+    @PostMapping(value = "/addLeaveDetail",produces = MediaType.APPLICATION_JSON_VALUE)
+    public LeaveDetailDto addLeaveDetail(@RequestBody LeaveDetailDto leavedetail) {
+        return leaveTypeService.createLeaveDetail(leavedetail);
     }
-    @GetMapping("/employeeLeaveDetail/{id}")
-    public EmployeeLeaveDetailResponse getEmployeeLeaveDetailByID(@PathVariable int id) throws IOException {
-        log.info("");
-
-        return leaveTypeService.getEmployeeLeaveDetailByID(id);
+    @GetMapping("/LeaveDetail")
+    public LeaveDetailDto getLeaveDetailByID(@PathVariable int id) throws IOException {
+        return leaveTypeService.getLeaveDetailByID(id);
     }
-
+    @PostMapping("/updateLeaveDetail")
+    public LeaveDetailDto updateLeaveDetail(@RequestBody LeaveDetailDto leavedetail){
+        return leaveTypeService.updateLeaveDetail(leavedetail);
+    }
+    @GetMapping("/RejectLeaveDetail/{id}")
+    public LeaveDetailDto deleteLeavedetail(@PathVariable int id){
+        return leaveTypeService.deleteLeaveDetail(id);
+    }
 }

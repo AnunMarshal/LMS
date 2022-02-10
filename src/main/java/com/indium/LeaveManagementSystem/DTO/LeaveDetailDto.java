@@ -1,5 +1,7 @@
 package com.indium.LeaveManagementSystem.DTO;
 
+import com.indium.LeaveManagementSystem.Model.EmployeeDetails;
+import com.indium.LeaveManagementSystem.Model.LeaveType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,11 +10,11 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeLeaveDetailResponse {
-   // private int id;
-    private int empId;
-    private int ManagerId;
-    private String LeaveType;
+public class LeaveDetailDto {
+    private int id;
+    private  EmployeeDetails empId;
+    private EmployeeDetails managerId;
+    private LeaveType leaveType;
     private String FromDate;
     private String ToDate;
     private int NoofDays;
