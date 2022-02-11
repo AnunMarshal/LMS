@@ -2,6 +2,7 @@ package com.indium.LeaveManagementSystem.Controller;
 
 import com.indium.LeaveManagementSystem.DTO.LeaveDetailDto;
 import com.indium.LeaveManagementSystem.DTO.LeaveTypeDto;
+import com.indium.LeaveManagementSystem.Model.LeaveDetail;
 import com.indium.LeaveManagementSystem.Service.LeaveService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +54,10 @@ public class LeaveController {
     @GetMapping("/LeaveDetail/{id}")
     public LeaveDetailDto getLeaveDetailByID(@PathVariable int id) throws IOException {
         return leaveTypeService.getLeaveDetailByID(id);
+    }
+    @GetMapping("/getLeaveDetail")
+    public List<LeaveDetailDto> getLeaveDetail()throws IOException {
+        return leaveTypeService.getLeaveDetail();
     }
     @PostMapping("/updateLeaveDetail")
     public LeaveDetailDto updateLeaveDetail(@RequestBody LeaveDetailDto leavedetail){

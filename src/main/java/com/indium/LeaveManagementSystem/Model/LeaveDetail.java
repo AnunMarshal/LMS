@@ -15,13 +15,13 @@ public class LeaveDetail {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @OneToOne
-    @JoinColumn(name = "fk_empId")
-    private EmployeeDetails empId;
+    @JoinColumn(name = "employeeId")
+    private EmployeeDetails employeeDetails;
     @OneToOne
-    @JoinColumn(name = "fk_managerId")
-    private EmployeeDetails managerId;
+    @JoinColumn(name = "managerId")
+    private EmployeeDetails manager;
     @OneToOne
-    @JoinColumn(name = "fk_leaveType")
+    @JoinColumn(name = "leaveTypeId")
     private LeaveType leaveType;
     private String fromDate;
     private String toDate;

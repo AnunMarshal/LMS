@@ -12,12 +12,12 @@ import java.util.Date;
 @AllArgsConstructor
 public class LeaveDetailDto {
     private int id;
-    private  EmployeeDetails empId;
-    private EmployeeDetails managerId;
+    private  EmployeeDetails employeeDetails ;
+    private EmployeeDetails manager;
     private LeaveType leaveType;
-    private String FromDate;
-    private String ToDate;
-    private int NoofDays;
+    private String fromDate;
+    private String toDate;
+    private int noofDays;
     private String reason;
     private String status;
     private Date createdAt;
