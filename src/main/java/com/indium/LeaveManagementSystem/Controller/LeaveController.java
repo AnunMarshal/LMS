@@ -2,13 +2,18 @@ package com.indium.LeaveManagementSystem.Controller;
 
 import com.indium.LeaveManagementSystem.DTO.LeaveDetailDto;
 import com.indium.LeaveManagementSystem.DTO.LeaveTypeDto;
-import com.indium.LeaveManagementSystem.Model.LeaveDetail;
 import com.indium.LeaveManagementSystem.Service.LeaveService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,17 +40,15 @@ public class LeaveController {
         return leaveTypeService.getLeaveTypes();
     }
 
-    @PostMapping("/updateLeaveType")
+    @PutMapping("/updateLeaveType")
     public LeaveTypeDto updateLeaveType(@RequestBody LeaveTypeDto leaveType){
         return leaveTypeService.updateLeaveType(leaveType);
     }
 
-    @GetMapping("/deleteLeaveType/{id}")
+    @DeleteMapping("/deleteLeaveType/{id}")
     public LeaveTypeDto deleteLeaveType(@PathVariable int id){
         return leaveTypeService.deleteLeaveType(id);
     }
-
-//============================================================================================
 
     @PostMapping(value = "/addLeaveDetail",produces = MediaType.APPLICATION_JSON_VALUE)
     public LeaveDetailDto addLeaveDetail(@RequestBody LeaveDetailDto leavedetail) {
@@ -59,7 +62,7 @@ public class LeaveController {
     public List<LeaveDetailDto> getLeaveDetail()throws IOException {
         return leaveTypeService.getLeaveDetail();
     }
-    @PostMapping("/updateLeaveDetail")
+    @PutMapping("/updateLeaveDetail")
     public LeaveDetailDto updateLeaveDetail(@RequestBody LeaveDetailDto leavedetail){
         return leaveTypeService.updateLeaveDetail(leavedetail);
     }

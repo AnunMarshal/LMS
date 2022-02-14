@@ -1,6 +1,5 @@
 package com.indium.LeaveManagementSystem.DTO;
 
-import com.indium.LeaveManagementSystem.Model.Roles;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

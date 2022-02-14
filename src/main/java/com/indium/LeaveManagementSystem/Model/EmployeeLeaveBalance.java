@@ -1,31 +1,37 @@
 package com.indium.LeaveManagementSystem.Model;
 
+import com.indium.LeaveManagementSystem.DTO.EmployeeDetailsDto;
+import com.indium.LeaveManagementSystem.DTO.LeaveTypeDto;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
 
-import javax.persistence.*;
 import java.util.Date;
-@Setter
-@Getter
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-
 public class EmployeeLeaveBalance {
     @Id
-
-    private int empId;
-
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    @OneToOne @JoinColumn(name= "employee_id")
+    private EmployeeDetails employeeDetails;
     private int leaveAvailability;
     private Date createdAt;
     private Date UpdatedAt;
     private String createdBy;
     private String updatedBy;
     private String Status;
-    @OneToOne(cascade = CascadeType.ALL)
-    private LeaveType leaveTypeId;
+    @OneToOne @JoinColumn(name="leaveType_id")
+    private LeaveType leaveType;
 
     public void setCreatedAt(Long createdAt) {
         Date date = new Date(createdAt);
@@ -37,4 +43,16 @@ public class EmployeeLeaveBalance {
         this.UpdatedAt = date;
     }
 
+
+    public void setEmployeeDetails(EmployeeDetailsDto employeeDetailsDto) {
+        EmployeeDetails employeeDetails=new EmployeeDetails();
+        employeeDetails.setEmpId(employeeDetailsDto.getEmpId());
+        this.employeeDetails = employeeDetails;
+    }
+
+    public void setLeaveType(LeaveTypeDto leaveTypeDto) {
+        LeaveType leaveType=new LeaveType();
+        leaveType.setId(leaveTypeDto.getId());
+        this.leaveType = leaveType;
+    }
 }

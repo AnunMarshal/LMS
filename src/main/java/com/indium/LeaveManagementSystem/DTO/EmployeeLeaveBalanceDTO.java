@@ -1,6 +1,6 @@
 package com.indium.LeaveManagementSystem.DTO;
 
-import com.indium.LeaveManagementSystem.Model.LeaveType;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,11 +11,12 @@ import java.util.Date;
 @Getter
 @Data
 public class EmployeeLeaveBalanceDTO {
-    private  int empId;
+    private int id;
+    private EmployeeDetailsDto employeeDetailsDto;
     private int leaveAvailability;
     private Date createdAt;
     private String Status;
-    private LeaveType leaveTypeId;
+    private LeaveTypeDto leaveTypeDto;
 
     public void setCreatedAt(Long createdAt) {
         Date date = new Date(createdAt);
