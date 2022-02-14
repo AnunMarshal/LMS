@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,27 +27,27 @@ public class LeaveController {
     LeaveService leaveTypeService;
 
     @PostMapping("/addLeaveType")
-    public LeaveTypeDto addLeaveType(@RequestBody LeaveTypeDto leaveType){
+    public ResponseEntity<String> addLeaveType(@RequestBody LeaveTypeDto leaveType){
         return leaveTypeService.createLeaveType(leaveType);
     }
 
     @GetMapping("/getLeaveType/{id}")
-    public LeaveTypeDto getLeaveTypeByID(@PathVariable int id) throws IOException {
+    public ResponseEntity<LeaveTypeDto> getLeaveTypeByID(@PathVariable int id) throws IOException {
         return leaveTypeService.getLeaveTypeByID(id);
     }
 
     @GetMapping("/getLeaveTypes")
-    public List<LeaveTypeDto> getLeaveTypes() throws IOException {
+    public ResponseEntity<List<LeaveTypeDto>> getLeaveTypes() throws IOException {
         return leaveTypeService.getLeaveTypes();
     }
 
     @PutMapping("/updateLeaveType")
-    public LeaveTypeDto updateLeaveType(@RequestBody LeaveTypeDto leaveType){
+    public ResponseEntity<String> updateLeaveType(@RequestBody LeaveTypeDto leaveType){
         return leaveTypeService.updateLeaveType(leaveType);
     }
 
     @DeleteMapping("/deleteLeaveType/{id}")
-    public LeaveTypeDto deleteLeaveType(@PathVariable int id){
+    public ResponseEntity<String> deleteLeaveType(@PathVariable int id){
         return leaveTypeService.deleteLeaveType(id);
     }
 

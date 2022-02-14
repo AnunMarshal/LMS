@@ -10,6 +10,10 @@ public class MessageConstants {
     public static final String EMPLOYEE_ADDED ="Employee Detail Added Successfully";
     public static final String EMPLOYEE_UPDATED ="Employee Detail Updated Successfully";
     public static final String EMPLOYEE_DELETED ="Employee Detail Deleted Successfully";
+    public static final String LEAVETYPE_ADDED ="Leave Type Added Successfully";
+    public static final String LEAVETYPE_UPDATED ="Leave Type Updated Successfully";
+    public static final String LEAVETYPE_DELETED ="Leave Type Deleted Successfully";
+    public static final String LEAVETYPE_BY_ID ="Leave Type By Id";
     public static final String BAD_REQUEST_ADD ="Error while adding details";
     public static final String BAD_REQUEST_GET ="Error while getting details";
     public static final String BAD_REQUEST_UPDATE ="Error while updating details";

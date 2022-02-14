@@ -12,6 +12,9 @@ import com.indium.LeaveManagementSystem.utils.MessageConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -34,7 +37,7 @@ public class LeaveService {
     @Autowired
     private EmployeeDetailsRepository employeeDetailsRepository;
 
-    public LeaveTypeDto createLeaveType(LeaveTypeDto leaveTypeRequest) {
+    public ResponseEntity<String> createLeaveType(LeaveTypeDto leaveTypeRequest) {
 
         LeaveTypeDto response = new LeaveTypeDto();
         LeaveType leaveType = new LeaveType();
@@ -48,15 +51,21 @@ public class LeaveService {
 
             leaveTypeRepository.save(leaveType);
 
-            response.setStatus("Successfully Added");
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("desc", MessageConstants.LEAVETYPE_ADDED);
+
+            return new ResponseEntity<String>(MessageConstants.LEAVETYPE_ADDED, headers, HttpStatus.OK);
+
+            //response.setStatus("Successfully Added");
 
         } else {
-            response.setStatus("Data is Null");
+            return new ResponseEntity<String>(MessageConstants.BAD_REQUEST_ADD, HttpStatus.BAD_REQUEST);
+            //response.setStatus("Data is Null");
         }
-        return response;
+        //return response;
     }
 
-    public LeaveTypeDto getLeaveTypeByID(int id) {
+    public ResponseEntity<LeaveTypeDto> getLeaveTypeByID(int id) {
 
         LeaveTypeDto response = new LeaveTypeDto();
         Optional<LeaveType> result = leaveTypeRepository.findById(id);
@@ -64,19 +73,22 @@ public class LeaveService {
         if (result.isPresent() && !result.get().getStatus().equals("Deleted")) {
             response.setId(result.get().getId());
             response.setType(result.get().getType());
-
             response.setStatus(result.get().getStatus());
             response.setCreatedAt(result.get().getCreatedAt().getTime());
 
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("desc", MessageConstants.LEAVETYPE_BY_ID);
 
+            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(response);
         } else {
-            response.setStatus("Error while getting details");
+            return new ResponseEntity(MessageConstants.BAD_REQUEST_GET, HttpStatus.BAD_REQUEST);
+            //response.setStatus("Error while getting details");
         }
-        return response;
+        //return response;
     }
 
 
-    public List<LeaveTypeDto> getLeaveTypes() {
+    public ResponseEntity<List<LeaveTypeDto>> getLeaveTypes() {
         List<LeaveTypeDto> response = new ArrayList<LeaveTypeDto>();
 
         List<LeaveType> leaveTypeList = leaveTypeRepository.findAll().stream().filter(e ->
@@ -99,12 +111,11 @@ public class LeaveService {
 
             response.add(leaveTypeDto);
         }
-
-        return response;
+        return ResponseEntity.ok(response);
     }
 
 
-    public LeaveTypeDto updateLeaveType(LeaveTypeDto leaveTypeDto) {
+    public ResponseEntity<String> updateLeaveType(LeaveTypeDto leaveTypeDto) {
         LeaveTypeDto response = new LeaveTypeDto();
         LeaveType leaveType = new LeaveType();
         Optional<LeaveType> result = leaveTypeRepository.findById(leaveTypeDto.getId());
@@ -119,18 +130,21 @@ public class LeaveService {
 
             leaveTypeRepository.save(leaveType);
 
-            response.setStatus("Successfully Updated");
+            //response.setStatus("Successfully Updated");
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("desc", MessageConstants.LEAVETYPE_UPDATED);
+
+            return new ResponseEntity<String>(MessageConstants.LEAVETYPE_UPDATED, headers, HttpStatus.OK);
 
         } else {
-            response.setStatus("Error while updating");
+            return new ResponseEntity<String>(MessageConstants.BAD_REQUEST_UPDATE, HttpStatus.BAD_REQUEST);
+            //response.setStatus("Error while updating");
         }
-
-
-        return response;
-
+        //return response;
     }
 
-    public LeaveTypeDto deleteLeaveType(int id) {
+    public ResponseEntity<String> deleteLeaveType(int id) {
         LeaveTypeDto response = new LeaveTypeDto();
         LeaveType leaveType = new LeaveType();
         Optional<LeaveType> result = leaveTypeRepository.findById(id);
@@ -145,12 +159,17 @@ public class LeaveService {
 
             leaveTypeRepository.save(leaveType);
 
-            response.setStatus("Leave Type deleted successfully");
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("desc", MessageConstants.LEAVETYPE_DELETED);
+
+            return new ResponseEntity<String>(MessageConstants.LEAVETYPE_DELETED, headers, HttpStatus.OK);
+            //response.setStatus("Leave Type deleted successfully");
 
         } else {
-            response.setStatus("Error while deleting");
+            return new ResponseEntity<String>(MessageConstants.BAD_REQUEST_DELETE, HttpStatus.BAD_REQUEST);
+            //response.setStatus("Error while deleting");
         }
-        return response;
+        //return response;
     }
     //======================================================================================
 
