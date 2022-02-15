@@ -4,7 +4,6 @@ import com.indium.LeaveManagementSystem.DTO.EmployeeDetailsDto;
 import com.indium.LeaveManagementSystem.DTO.EmployeeLeaveBalanceDTO;
 import com.indium.LeaveManagementSystem.DTO.ManagerActionDto;
 import com.indium.LeaveManagementSystem.DTO.RolesDto;
-import com.indium.LeaveManagementSystem.Model.EmployeeLeaveBalance;
 import com.indium.LeaveManagementSystem.Service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +17,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
-
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -107,7 +104,7 @@ public class EmployeeController {
     public ResponseEntity<String> updateroles(@RequestBody  RolesDto roles){
         return service.updateroles(roles);
     }
-    @GetMapping("/deleteroles/{id}")
+    @DeleteMapping("/deleteroles/{id}")
     public ResponseEntity<String> deleteroles(@PathVariable int id){
         return service.deleteroles(id);
     }

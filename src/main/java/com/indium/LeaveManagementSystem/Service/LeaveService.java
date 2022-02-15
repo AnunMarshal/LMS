@@ -41,7 +41,6 @@ public class LeaveService {
 
     public ResponseEntity<String> createLeaveType(LeaveTypeDto leaveTypeRequest) {
 
-        LeaveTypeDto response = new LeaveTypeDto();
         LeaveType leaveType = new LeaveType();
 
         if (leaveTypeRequest != null) {
@@ -58,13 +57,9 @@ public class LeaveService {
 
             return new ResponseEntity<String>(MessageConstants.LEAVETYPE_ADDED, headers, HttpStatus.OK);
 
-            //response.setStatus("Successfully Added");
-
         } else {
             return new ResponseEntity<String>(MessageConstants.BAD_REQUEST_ADD, HttpStatus.BAD_REQUEST);
-            //response.setStatus("Data is Null");
         }
-        //return response;
     }
 
     public ResponseEntity<LeaveTypeDto> getLeaveTypeByID(int id) {
@@ -84,9 +79,7 @@ public class LeaveService {
             return ResponseEntity.status(HttpStatus.OK).headers(headers).body(response);
         } else {
             return new ResponseEntity(MessageConstants.BAD_REQUEST_GET, HttpStatus.BAD_REQUEST);
-            //response.setStatus("Error while getting details");
         }
-        //return response;
     }
 
 
@@ -118,7 +111,6 @@ public class LeaveService {
 
 
     public ResponseEntity<String> updateLeaveType(LeaveTypeDto leaveTypeDto) {
-        LeaveTypeDto response = new LeaveTypeDto();
         LeaveType leaveType = new LeaveType();
         Optional<LeaveType> result = leaveTypeRepository.findById(leaveTypeDto.getId());
 
@@ -132,8 +124,6 @@ public class LeaveService {
 
             leaveTypeRepository.save(leaveType);
 
-            //response.setStatus("Successfully Updated");
-
             HttpHeaders headers = new HttpHeaders();
             headers.add("desc", MessageConstants.LEAVETYPE_UPDATED);
 
@@ -141,9 +131,7 @@ public class LeaveService {
 
         } else {
             return new ResponseEntity<String>(MessageConstants.BAD_REQUEST_UPDATE, HttpStatus.BAD_REQUEST);
-            //response.setStatus("Error while updating");
         }
-        //return response;
     }
 
     public ResponseEntity<String> deleteLeaveType(int id) {
@@ -165,69 +153,54 @@ public class LeaveService {
             headers.add("desc", MessageConstants.LEAVETYPE_DELETED);
 
             return new ResponseEntity<String>(MessageConstants.LEAVETYPE_DELETED, headers, HttpStatus.OK);
-            //response.setStatus("Leave Type deleted successfully");
-
         } else {
             return new ResponseEntity<String>(MessageConstants.BAD_REQUEST_DELETE, HttpStatus.BAD_REQUEST);
-            //response.setStatus("Error while deleting");
         }
-        //return response;
     }
     //======================================================================================
 
 
     public ResponseEntity<String> createLeaveDetail(LeaveDetailDto leaveDetailRequest) {
 
-        //Optional<EmployeeDetails> employeeDetail= employeeDetailsRepository
-        //       .findById(leaveDetailDto.getEmployeeDetails().getEmpId());
+        /*Optional<EmployeeDetails> employeeDetail= employeeDetailsRepository
+               .findById(leaveDetailDto.getEmployeeDetails().getEmpId());
 
-        // Optional<LeaveType> leaveType= leaveTypeRepository
-        //        .findById(leaveDetailDto.getLeaveType().getId());
+         Optional<LeaveType> leaveType= leaveTypeRepository
+               .findById(leaveDetailDto.getLeaveType().getId());
 
-        //Todo - Validate employee and leave type
+        if (leaveDetailDto != null  && employeeDetail.get().getStatus().equals(MessageConstants.ACTIVE)
+              && leaveType.get().getStatus().equals(MessageConstants.ACTIVE) ) {
+   */
 
-        LeaveDetailDto response = new LeaveDetailDto();
-       // LeaveDetail leaveDetail = new LeaveDetail();
-        //log.info("Add*leavedetail"+LeaveDetailRequest.getFromDate());
-        //if (leaveDetailDto != null  && employeeDetail.get().getStatus().equals(MessageConstants.ACTIVE)
-        //      && leaveType.get().getStatus().equals(MessageConstants.ACTIVE) ) {
-        EmployeeDetails manager = new EmployeeDetails();
-
-        manager.setEmpId(leaveDetailRequest.getManagerDto().getEmpId());
         LeaveDetail leaveDetail = new LeaveDetail();
         if (leaveDetailRequest != null) {
 
             leaveDetail.setId(leaveDetailRequest.getId());
             leaveDetail.setEmployeeDetails(leaveDetailRequest.getEmployeeDetailsDto());
-            leaveDetail.setManager(manager);
+            leaveDetail.setManager(leaveDetailRequest.getManagerDto());
             leaveDetail.setLeaveType(leaveDetailRequest.getLeaveTypeDto());
             leaveDetail.setFromDate(leaveDetailRequest.getFromDate());
             leaveDetail.setToDate(leaveDetailRequest.getToDate());
-            log.info("No of Days----------> " + leaveDetailRequest.getNoofDays());
             leaveDetail.setNoofDays(leaveDetailRequest.getNoofDays());
             leaveDetail.setReason(leaveDetailRequest.getReason());
             leaveDetail.setCreatedAt(System.currentTimeMillis());
             leaveDetail.setStatus("Pending");
-            eldrepository.save(leaveDetail);
-            response.setStatus("Successfully Added");
 
+            log.info("No of Days----------> " + leaveDetailRequest.getNoofDays());
+
+            eldrepository.save(leaveDetail);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("desc", MessageConstants.LEAVEDETAIL_ADDED);
 
             return new ResponseEntity<String>(MessageConstants.LEAVEDETAIL_ADDED, headers, HttpStatus.OK);
-
-            //response.setStatus("Successfully Added");
-
         } else {
             return new ResponseEntity<String>(MessageConstants.BAD_REQUEST_ADD, HttpStatus.BAD_REQUEST);
-            //response.setStatus("Data is Null");
         }
-        //return response;
     }
 
 
-    //======================================================================
+
     public ResponseEntity getLeaveDetailByID(int id) throws IOException {
         LeaveDetailDto response = new LeaveDetailDto();
 
@@ -264,7 +237,6 @@ public class LeaveService {
             manager.setStatus(result.get().getManager().getStatus());
 
             LeaveTypeDto leaveTypeDto = new LeaveTypeDto();
-            leaveTypeDto.setId(result.get().getLeaveType().getId());
 
             leaveTypeDto.setId(result.get().getLeaveType().getId());
             leaveTypeDto.setType(result.get().getLeaveType().getType());
@@ -281,6 +253,7 @@ public class LeaveService {
             response.setNoofDays(result.get().getNoofDays());
             response.setReason(result.get().getReason());
             response.setCreatedAt(System.currentTimeMillis());
+            response.setStatus(result.get().getStatus());
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("desc", MessageConstants.LEAVEDETAIL_ID);
@@ -288,18 +261,15 @@ public class LeaveService {
             return ResponseEntity.status(HttpStatus.OK).headers(headers).body(response);
         } else {
             return new ResponseEntity(MessageConstants.BAD_REQUEST_GET, HttpStatus.BAD_REQUEST);
-            //response.setStatus("Error while getting details");
         }
-        //return response;
     }
 
-    //=============================================================================
     public ResponseEntity<List<LeaveDetailDto>> getLeaveDetail() {
 
         List<LeaveDetailDto> response = new ArrayList<>();
         log.info("********202");
         List<LeaveDetail> leaveDetailList = eldrepository.findAll().stream().filter(e ->
-                 e.getStatus().equals(MessageConstants.PENDING)).collect(Collectors.toList());
+                e.getStatus().equals(MessageConstants.PENDING)).collect(Collectors.toList());
 
         // List<LeaveDetail>  leaveDetailList=eldrepository.findAll();
 
@@ -385,13 +355,14 @@ public class LeaveService {
 
             LeaveDetail.setId(leaveDetailDto.getId());
             LeaveDetail.setEmployeeDetails(leaveDetailDto.getEmployeeDetailsDto());
-            LeaveDetail.setManager(manager);
+            LeaveDetail.setManager(leaveDetailDto.getManagerDto());
             LeaveDetail.setLeaveType(leaveDetailDto.getLeaveTypeDto());
             LeaveDetail.setFromDate(leaveDetailDto.getFromDate());
             LeaveDetail.setToDate(leaveDetailDto.getToDate());
             LeaveDetail.setNoofDays(leaveDetailDto.getNoofDays());
             LeaveDetail.setReason(leaveDetailDto.getReason());
-            LeaveDetail.setCreatedAt(System.currentTimeMillis());
+            LeaveDetail.setCreatedAt(result.get().getCreatedAt().getTime());
+            LeaveDetail.setUpdatedAt(System.currentTimeMillis());
             LeaveDetail.setStatus(leaveDetailDto.getStatus());
             eldrepository.save(LeaveDetail);
 
@@ -420,25 +391,19 @@ public class LeaveService {
 
         EmployeeDetailsDto employeeDetailsDto = new EmployeeDetailsDto();
         employeeDetailsDto.setEmpId(result.get().getEmployeeDetails().getEmpId());
-        employeeDetailsDto.setName(result.get().getEmployeeDetails().getName());
-        employeeDetailsDto.setRolesDto(rolesDto);
-        employeeDetailsDto.setAddress(result.get().getEmployeeDetails().getAddress());
-        employeeDetailsDto.setPhone(result.get().getEmployeeDetails().getPhone());
-        employeeDetailsDto.setEmail(result.get().getEmployeeDetails().getEmail());
-        employeeDetailsDto.setStatus(result.get().getEmployeeDetails().getStatus());
-        // employeeDetailsDto.setCreatedAt(result.get().getEmployeeDetails().getCreatedAt().getTime());
-        employeeDetailsDto.setCreatedAt(System.currentTimeMillis());
+
+
+        EmployeeDetailsDto manager = new EmployeeDetailsDto();
+        manager.setEmpId(result.get().getManager().getEmpId());
 
         LeaveTypeDto leaveTypeDto = new LeaveTypeDto();
         leaveTypeDto.setId(result.get().getLeaveType().getId());
-        leaveTypeDto.setType(result.get().getLeaveType().getType());
-        leaveTypeDto.setStatus(result.get().getLeaveType().getStatus());
-        leaveTypeDto.setCreatedAt(result.get().getCreatedAt().getTime());
+
 
         if (result.isPresent() && !result.get().getStatus().equals(MessageConstants.DELETED)) {
             leaveDetail.setId(result.get().getId());
             leaveDetail.setEmployeeDetails(employeeDetailsDto);
-            leaveDetail.setManager(result.get().getManager());
+            leaveDetail.setManager(manager);
             leaveDetail.setLeaveType(leaveTypeDto);
             leaveDetail.setFromDate(result.get().getFromDate());
             leaveDetail.setToDate(result.get().getToDate());
@@ -463,4 +428,3 @@ public class LeaveService {
         //return response;
     }
 }
-//======================================================================================

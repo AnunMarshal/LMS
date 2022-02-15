@@ -2,7 +2,6 @@ package com.indium.LeaveManagementSystem.Controller;
 
 import com.indium.LeaveManagementSystem.DTO.LeaveDetailDto;
 import com.indium.LeaveManagementSystem.DTO.LeaveTypeDto;
-import com.indium.LeaveManagementSystem.DTO.RolesDto;
 import com.indium.LeaveManagementSystem.Service.LeaveService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -68,10 +66,9 @@ public class LeaveController {
     public ResponseEntity<String> updateLeaveDetail(@RequestBody LeaveDetailDto leavedetail){
         return leaveTypeService.updateLeaveDetail(leavedetail);
     }
-    @GetMapping("/DeleteLeaveDetail/{id}")
+    @DeleteMapping("/DeleteLeaveDetail/{id}")
     public ResponseEntity<String> deleteLeavedetail(@PathVariable int id){
         return leaveTypeService.deleteLeaveDetail(id);
     }
-    //==================================================================================
 
 }

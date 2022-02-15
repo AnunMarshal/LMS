@@ -1,13 +1,16 @@
 package com.indium.LeaveManagementSystem.Service;
 
 
-
 import com.indium.LeaveManagementSystem.DTO.EmployeeDetailsDto;
 import com.indium.LeaveManagementSystem.DTO.ManagerActionDto;
 import com.indium.LeaveManagementSystem.DTO.RolesDto;
 import com.indium.LeaveManagementSystem.DTO.EmployeeLeaveBalanceDTO;
 import com.indium.LeaveManagementSystem.DTO.LeaveTypeDto;
-import com.indium.LeaveManagementSystem.Model.*;
+import com.indium.LeaveManagementSystem.Model.EmployeeDetails;
+import com.indium.LeaveManagementSystem.Model.EmployeeLeaveBalance;
+import com.indium.LeaveManagementSystem.Model.LeaveDetail;
+import com.indium.LeaveManagementSystem.Model.LeaveType;
+import com.indium.LeaveManagementSystem.Model.Roles;
 import com.indium.LeaveManagementSystem.Repository.EmployeeDetailsRepository;
 import com.indium.LeaveManagementSystem.Repository.EmployeeLeaveBalanceRepository;
 import com.indium.LeaveManagementSystem.Repository.LeaveDetailRepository;
@@ -54,7 +57,7 @@ public class EmployeeService {
             employeeDetails.setPhone(employeeDetailsRequest.getPhone());
             employeeDetails.setEmail(employeeDetailsRequest.getEmail());
             employeeDetails.setCreatedAt(System.currentTimeMillis());
-            employeeDetails.setStatus("Active");
+            employeeDetails.setStatus(MessageConstants.ACTIVE);
 
             repository.save(employeeDetails);
 
@@ -147,12 +150,12 @@ public class EmployeeService {
             employeeDetails.setEmail(employeeDetailsDto.getEmail());
             employeeDetails.setUpdatedAt(System.currentTimeMillis());
             employeeDetails.setCreatedAt(result.get().getCreatedAt().getTime());
-            employeeDetails.setStatus("Active");
+            employeeDetails.setStatus(MessageConstants.ACTIVE);
 
             repository.save(employeeDetails);
 
             HttpHeaders headers = new HttpHeaders();
-            headers.add("desc", MessageConstants.EMPLOYEE_UPDATED);
+            headers.add("desc", MessageConstants.EMPLOYEE_UPDATED);  //
 
             return new ResponseEntity<String>(MessageConstants.EMPLOYEE_UPDATED, headers, HttpStatus.OK);
 
@@ -182,7 +185,7 @@ public class EmployeeService {
             employeeDetails.setEmail(result.get().getEmail());
             employeeDetails.setCreatedAt(result.get().getCreatedAt().getTime());
             employeeDetails.setUpdatedAt(System.currentTimeMillis());
-            employeeDetails.setStatus("Deleted");
+            employeeDetails.setStatus(MessageConstants.DELETED);
 
             repository.save(employeeDetails);
 
@@ -314,7 +317,7 @@ public class EmployeeService {
         //return elbRepository.findByEmployeeDetails(employeeDetails);
     }
 
-    public ResponseEntity<String> updateLeaveBalance(EmployeeLeaveBalanceDTO leaveBalanceDTO) {
+    public ResponseEntity<String> updateLeaveBalance(EmployeeLeaveBalanceDTO leaveBalanceDTO) { //ADD BALANCE
 
         EmployeeLeaveBalanceDTO response = new EmployeeLeaveBalanceDTO();
         EmployeeLeaveBalance employeeLeaveBalance = new EmployeeLeaveBalance();
@@ -396,6 +399,15 @@ public class EmployeeService {
             int noOfDays = result1.get().getNoofDays();
             EmployeeDetails empId = result1.get().getEmployeeDetails();
 
+            EmployeeDetailsDto detailsDto = new EmployeeDetailsDto();
+            detailsDto.setEmpId(result1.get().getEmployeeDetails().getEmpId());
+
+            EmployeeDetailsDto manager = new EmployeeDetailsDto();
+            manager.setEmpId(result1.get().getManager().getEmpId());
+
+            LeaveTypeDto typeDto = new LeaveTypeDto();
+            typeDto.setId(result1.get().getLeaveType().getId());
+
             if (status.equals(MessageConstants.APPROVED)) {
 
                 HttpHeaders headers = new HttpHeaders();
@@ -403,16 +415,16 @@ public class EmployeeService {
 
                 LeaveDetail leaveDetail = new LeaveDetail();
                 leaveDetail.setId(result1.get().getId());
-                leaveDetail.setManager(result1.get().getManager());
-               // leaveDetail.setEmployeeDetails(result1.get().getEmployeeDetails());
-               // leaveDetail.setLeaveType(result1.get().getLeaveType());
+                leaveDetail.setManager(manager);
+                leaveDetail.setEmployeeDetails(detailsDto);
+                leaveDetail.setLeaveType(typeDto);
                 leaveDetail.setFromDate(result1.get().getFromDate());
                 leaveDetail.setToDate(result1.get().getToDate());
                 leaveDetail.setReason(result1.get().getReason());
                 leaveDetail.setStatus(MessageConstants.APPROVED);
                 leaveDetail.setNoofDays(result1.get().getNoofDays());
-                //leaveDetail.setCreatedAt();
-                //leaveDetailDto.setStatus("Approved");
+                leaveDetail.setCreatedAt(result1.get().getCreatedAt().getTime());
+                leaveDetail.setUpdatedAt(System.currentTimeMillis());
 
 
                 leaveDetailRepository.save(leaveDetail);
@@ -457,14 +469,17 @@ public class EmployeeService {
                 //response.setStatus("Leave Request Rejected");
                 LeaveDetail leaveDetail = new LeaveDetail();
                 leaveDetail.setId(result1.get().getId());
-                leaveDetail.setManager(result1.get().getManager());
-              //  leaveDetail.setEmployeeDetails(result1.get().getEmployeeDetails());
-               // leaveDetail.setLeaveType(result1.get().getLeaveType());
+                leaveDetail.setManager(manager);
+                leaveDetail.setEmployeeDetails(detailsDto);
+                leaveDetail.setLeaveType(typeDto);
                 leaveDetail.setFromDate(result1.get().getFromDate());
                 leaveDetail.setToDate(result1.get().getToDate());
                 leaveDetail.setReason(result1.get().getReason());
                 leaveDetail.setStatus(MessageConstants.REJECTED);
                 leaveDetail.setNoofDays(result1.get().getNoofDays());
+                leaveDetail.setCreatedAt(result1.get().getCreatedAt().getTime());
+                leaveDetail.setUpdatedAt(System.currentTimeMillis());
+
                 leaveDetailRepository.save(leaveDetail);
                 return new ResponseEntity<String>(MessageConstants.LEAVE_REJECTED, HttpStatus.OK);
             }

@@ -1,7 +1,6 @@
 package com.indium.LeaveManagementSystem.DTO;
 
-import com.indium.LeaveManagementSystem.Model.EmployeeDetails;
-import com.indium.LeaveManagementSystem.Model.LeaveType;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

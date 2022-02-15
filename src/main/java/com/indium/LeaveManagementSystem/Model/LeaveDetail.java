@@ -2,19 +2,17 @@ package com.indium.LeaveManagementSystem.Model;
 
 import com.indium.LeaveManagementSystem.DTO.EmployeeDetailsDto;
 import com.indium.LeaveManagementSystem.DTO.LeaveTypeDto;
-import com.indium.LeaveManagementSystem.DTO.RolesDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.OneToOne;
 import javax.persistence.JoinColumn;
-
 import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +23,7 @@ public class LeaveDetail {
     private int id;
     @OneToOne
     @JoinColumn(name = "employeeId")
-    private EmployeeDetails employeeDetails;
+    private EmployeeDetails employeeDetails;       //employee
     @OneToOne
     @JoinColumn(name = "managerId")
     private EmployeeDetails manager;
@@ -52,10 +50,17 @@ public class LeaveDetail {
         this.updatedAt = d;
     }
      public void setEmployeeDetails(EmployeeDetailsDto employeeDetailsDto) {
-        EmployeeDetails employeeDetails=new EmployeeDetails();
+        EmployeeDetails employeeDetails=new EmployeeDetails();   //java8 use
         employeeDetails.setEmpId(employeeDetailsDto.getEmpId());
         this.employeeDetails = employeeDetails;
     }
+
+    public void setManager(EmployeeDetailsDto manager) {
+        EmployeeDetails employeeDetails1=new EmployeeDetails();
+        employeeDetails1.setEmpId(manager.getEmpId());
+        this.manager = employeeDetails1;
+    }
+
     public void setLeaveType(LeaveTypeDto leaveTypeDto) {
         LeaveType leaveType=new LeaveType();
         leaveType.setId(leaveTypeDto.getId());
