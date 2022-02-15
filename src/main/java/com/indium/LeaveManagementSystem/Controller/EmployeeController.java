@@ -3,11 +3,13 @@ package com.indium.LeaveManagementSystem.Controller;
 import com.indium.LeaveManagementSystem.DTO.EmployeeDetailsDto;
 import com.indium.LeaveManagementSystem.DTO.EmployeeLeaveBalanceDTO;
 import com.indium.LeaveManagementSystem.DTO.ManagerActionDto;
+import com.indium.LeaveManagementSystem.DTO.RolesDto;
 import com.indium.LeaveManagementSystem.Model.EmployeeLeaveBalance;
 import com.indium.LeaveManagementSystem.Service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -87,6 +89,27 @@ public class EmployeeController {
     @PostMapping("/ManagerAction")
     public ResponseEntity<String> managerAction(@RequestBody ManagerActionDto managerActionDto){
         return service.managerAction(managerActionDto);
+    }
+    //===================================================================================
+    @PostMapping(value = "/addroles",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> addroles(@RequestBody RolesDto roles) {
+        return service.createroles(roles);
+    }
+    @GetMapping("/rolesById/{id}")
+    public ResponseEntity<RolesDto> getrolesByID(@PathVariable int id) throws IOException {
+        return service.getrolesByID(id);
+    }
+    @GetMapping("/getroles")
+    public ResponseEntity<List<RolesDto>>getroles()throws IOException {
+        return service.getroles();
+    }
+    @PutMapping("/updateroles")
+    public ResponseEntity<String> updateroles(@RequestBody  RolesDto roles){
+        return service.updateroles(roles);
+    }
+    @GetMapping("/deleteroles/{id}")
+    public ResponseEntity<String> deleteroles(@PathVariable int id){
+        return service.deleteroles(id);
     }
 
 }

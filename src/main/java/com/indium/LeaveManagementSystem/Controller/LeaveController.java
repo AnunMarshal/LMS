@@ -2,6 +2,7 @@ package com.indium.LeaveManagementSystem.Controller;
 
 import com.indium.LeaveManagementSystem.DTO.LeaveDetailDto;
 import com.indium.LeaveManagementSystem.DTO.LeaveTypeDto;
+import com.indium.LeaveManagementSystem.DTO.RolesDto;
 import com.indium.LeaveManagementSystem.Service.LeaveService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,23 +53,25 @@ public class LeaveController {
     }
 
     @PostMapping(value = "/addLeaveDetail",produces = MediaType.APPLICATION_JSON_VALUE)
-    public LeaveDetailDto addLeaveDetail(@RequestBody LeaveDetailDto leavedetail) {
+    public ResponseEntity<String> addLeaveDetail(@RequestBody LeaveDetailDto leavedetail) {
         return leaveTypeService.createLeaveDetail(leavedetail);
     }
     @GetMapping("/LeaveDetail/{id}")
-    public LeaveDetailDto getLeaveDetailByID(@PathVariable int id) throws IOException {
+    public ResponseEntity<LeaveDetailDto> getLeaveDetailByID(@PathVariable int id) throws IOException {
         return leaveTypeService.getLeaveDetailByID(id);
     }
     @GetMapping("/getLeaveDetail")
-    public List<LeaveDetailDto> getLeaveDetail()throws IOException {
+    public ResponseEntity<List<LeaveDetailDto>>getLeaveDetail()throws IOException {
         return leaveTypeService.getLeaveDetail();
     }
     @PutMapping("/updateLeaveDetail")
-    public LeaveDetailDto updateLeaveDetail(@RequestBody LeaveDetailDto leavedetail){
+    public ResponseEntity<String> updateLeaveDetail(@RequestBody LeaveDetailDto leavedetail){
         return leaveTypeService.updateLeaveDetail(leavedetail);
     }
-    @GetMapping("/RejectLeaveDetail/{id}")
-    public LeaveDetailDto deleteLeavedetail(@PathVariable int id){
+    @GetMapping("/DeleteLeaveDetail/{id}")
+    public ResponseEntity<String> deleteLeavedetail(@PathVariable int id){
         return leaveTypeService.deleteLeaveDetail(id);
     }
+    //==================================================================================
+
 }

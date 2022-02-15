@@ -23,6 +23,14 @@ public class MessageConstants {
     public static final String LEAVE_REJECTED ="Leave Rejeted";
     public static final String INVALID_REQUEST ="Invalid Request";
     public static final String No_LEAVE_BALANCE ="No Leave Balance";
+    public static final String LEAVEDETAIL_ADDED = "Successfully Added";
+    public static final String LEAVEDETAIL_ID = "LeaveDetail Added By Id";
+    public static final String LEAVEDETAIL_UPDATED ="LeaveDetail Updated Successfully";
+    public static final String LEAVEDETAIL_DELETED = "LeaveDetail Deleted Successfully";
+    public static final String ROLES_ADDED = "Roles Added Successfully";
+    public static final String ROLES_BY_ID = "Roles Added By Id" ;
+    public static final String ROLES_UPDATED = ("Roles Updated Successfully");
+    public static final String ROLES_DELETED = ("Roles Deleted Successfully");
 
     //public static final String SUCCESSFULLY_ADDED ="Employee Detail added Successfully";
 

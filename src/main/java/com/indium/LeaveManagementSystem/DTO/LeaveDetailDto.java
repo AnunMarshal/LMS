@@ -12,9 +12,9 @@ import java.util.Date;
 @AllArgsConstructor
 public class LeaveDetailDto {
     private int id;
-    private  EmployeeDetails employeeDetails ;
-    private EmployeeDetails manager;
-    private LeaveType leaveType;
+    private  EmployeeDetailsDto employeeDetailsDto ;
+    private EmployeeDetailsDto managerDto;
+    private LeaveTypeDto leaveTypeDto;
     private String fromDate;
     private String toDate;
     private int noofDays;

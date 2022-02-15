@@ -7,13 +7,11 @@ import com.indium.LeaveManagementSystem.DTO.ManagerActionDto;
 import com.indium.LeaveManagementSystem.DTO.RolesDto;
 import com.indium.LeaveManagementSystem.DTO.EmployeeLeaveBalanceDTO;
 import com.indium.LeaveManagementSystem.DTO.LeaveTypeDto;
-import com.indium.LeaveManagementSystem.Model.EmployeeDetails;
-import com.indium.LeaveManagementSystem.Model.EmployeeLeaveBalance;
-import com.indium.LeaveManagementSystem.Model.LeaveDetail;
-import com.indium.LeaveManagementSystem.Model.LeaveType;
+import com.indium.LeaveManagementSystem.Model.*;
 import com.indium.LeaveManagementSystem.Repository.EmployeeDetailsRepository;
 import com.indium.LeaveManagementSystem.Repository.EmployeeLeaveBalanceRepository;
 import com.indium.LeaveManagementSystem.Repository.LeaveDetailRepository;
+import com.indium.LeaveManagementSystem.Repository.RolesRepository;
 import com.indium.LeaveManagementSystem.utils.MessageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +36,8 @@ public class EmployeeService {
     private EmployeeLeaveBalanceRepository elbRepository;
     @Autowired
     private LeaveDetailRepository leaveDetailRepository;
+    @Autowired
+    private RolesRepository rolesRepository;
 
 
     public ResponseEntity<String> createEmployeeDetails(EmployeeDetailsDto employeeDetailsRequest) {
@@ -267,7 +267,7 @@ public class EmployeeService {
 
     public ResponseEntity<List<EmployeeLeaveBalanceDTO>> getLeaveBalanceByEmp(int id) {
 
-        List<EmployeeLeaveBalanceDTO> response=new ArrayList<>();
+        List<EmployeeLeaveBalanceDTO> response = new ArrayList<>();
 
         Optional<EmployeeDetails> result = repository.findById(id);
         EmployeeDetails employeeDetails = new EmployeeDetails();
@@ -275,13 +275,13 @@ public class EmployeeService {
 
         //log.info("****************"+employeeDetails.toString());
 
-        List<EmployeeLeaveBalance> employeeLeaveBalanceList=elbRepository.findByEmployeeDetails(employeeDetails);
+        List<EmployeeLeaveBalance> employeeLeaveBalanceList = elbRepository.findByEmployeeDetails(employeeDetails);
 
-        for(EmployeeLeaveBalance employeeLeaveBalance:employeeLeaveBalanceList){
-            EmployeeDetailsDto employeeDetailsDto=new EmployeeDetailsDto();
+        for (EmployeeLeaveBalance employeeLeaveBalance : employeeLeaveBalanceList) {
+            EmployeeDetailsDto employeeDetailsDto = new EmployeeDetailsDto();
             employeeDetailsDto.setEmpId(result.get().getEmpId());
 
-            RolesDto rolesDto=new RolesDto();
+            RolesDto rolesDto = new RolesDto();
             rolesDto.setId(result.get().getRoles().getId());
             rolesDto.setRoleName(result.get().getRoles().getRoleName());
             rolesDto.setStatus(result.get().getRoles().getStatus());
@@ -293,13 +293,13 @@ public class EmployeeService {
             employeeDetailsDto.setStatus(result.get().getStatus());
             employeeDetailsDto.setEmail(result.get().getEmail());
 
-            LeaveTypeDto leaveTypeDto=new LeaveTypeDto();
+            LeaveTypeDto leaveTypeDto = new LeaveTypeDto();
             leaveTypeDto.setId(employeeLeaveBalance.getLeaveType().getId());
             leaveTypeDto.setType(employeeLeaveBalance.getLeaveType().getType());
             leaveTypeDto.setStatus(employeeLeaveBalance.getStatus());
             leaveTypeDto.setCreatedAt(employeeLeaveBalance.getCreatedAt().getTime());
 
-            EmployeeLeaveBalanceDTO employeeLeaveBalanceDTO=new EmployeeLeaveBalanceDTO();
+            EmployeeLeaveBalanceDTO employeeLeaveBalanceDTO = new EmployeeLeaveBalanceDTO();
 
             employeeLeaveBalanceDTO.setEmployeeDetailsDto(employeeDetailsDto);
             employeeLeaveBalanceDTO.setLeaveAvailability(employeeLeaveBalance.getLeaveAvailability());
@@ -387,7 +387,7 @@ public class EmployeeService {
 
     public ResponseEntity<String> managerAction(ManagerActionDto managerActionDto) {
 
-        String status=managerActionDto.getStatus();
+        String status = managerActionDto.getStatus();
         Optional<LeaveDetail> result1 = leaveDetailRepository.findById(managerActionDto.getLeaveDetailId());
 
         if (result1.isPresent() && result1.get().getStatus().equals(MessageConstants.PENDING)) {
@@ -404,8 +404,8 @@ public class EmployeeService {
                 LeaveDetail leaveDetail = new LeaveDetail();
                 leaveDetail.setId(result1.get().getId());
                 leaveDetail.setManager(result1.get().getManager());
-                leaveDetail.setEmployeeDetails(result1.get().getEmployeeDetails());
-                leaveDetail.setLeaveType(result1.get().getLeaveType());
+               // leaveDetail.setEmployeeDetails(result1.get().getEmployeeDetails());
+               // leaveDetail.setLeaveType(result1.get().getLeaveType());
                 leaveDetail.setFromDate(result1.get().getFromDate());
                 leaveDetail.setToDate(result1.get().getToDate());
                 leaveDetail.setReason(result1.get().getReason());
@@ -458,8 +458,8 @@ public class EmployeeService {
                 LeaveDetail leaveDetail = new LeaveDetail();
                 leaveDetail.setId(result1.get().getId());
                 leaveDetail.setManager(result1.get().getManager());
-                leaveDetail.setEmployeeDetails(result1.get().getEmployeeDetails());
-                leaveDetail.setLeaveType(result1.get().getLeaveType());
+              //  leaveDetail.setEmployeeDetails(result1.get().getEmployeeDetails());
+               // leaveDetail.setLeaveType(result1.get().getLeaveType());
                 leaveDetail.setFromDate(result1.get().getFromDate());
                 leaveDetail.setToDate(result1.get().getToDate());
                 leaveDetail.setReason(result1.get().getReason());
@@ -476,5 +476,133 @@ public class EmployeeService {
 
 
     }
-}
 
+    //==================================================================================
+    public ResponseEntity<String> createroles(RolesDto rolesRequest) {
+        RolesDto response = new RolesDto();
+        Roles roles = new Roles();
+
+        if (rolesRequest != null) {
+
+            roles.setId(rolesRequest.getId());
+            roles.setRoleName(rolesRequest.getRoleName());
+            roles.setStatus("Active");
+
+
+            rolesRepository.save(roles);
+
+            response.setStatus("Successfully Added");
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("desc", MessageConstants.ROLES_ADDED);
+
+            return new ResponseEntity<String>(MessageConstants.ROLES_ADDED, headers, HttpStatus.OK);
+
+            //response.setStatus("Roles Added Successfully");
+
+        } else {
+            return new ResponseEntity<String>(MessageConstants.BAD_REQUEST_ADD, HttpStatus.BAD_REQUEST);
+            //response.setStatus("Data is Null");
+        }
+        //return response;
+    }
+
+    public ResponseEntity<RolesDto> getrolesByID(int id) {
+
+        RolesDto response = new RolesDto();
+        Optional<Roles> result = rolesRepository.findById(id);
+
+        if (result.isPresent() && !result.get().getStatus().equals("Deleted")) {
+            response.setId(result.get().getId());
+            response.setRoleName(result.get().getRoleName());
+            response.setStatus(result.get().getStatus());
+
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("desc", MessageConstants.ROLES_BY_ID);
+
+            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(response);
+        } else {
+            return new ResponseEntity(MessageConstants.BAD_REQUEST_GET, HttpStatus.BAD_REQUEST);
+            //response.setStatus("Error while getting details");
+        }
+        //return response;
+    }
+
+
+    public ResponseEntity<List<RolesDto>> getroles() {
+        List<RolesDto> response = new ArrayList<RolesDto>();
+
+        List<Roles> rolesList = rolesRepository.findAll().stream().filter(e ->
+                e.getStatus().equals("Active")).collect(Collectors.toList());
+
+        log.info("************getroles" + rolesList.toString());
+        for (Roles roles : rolesList) {
+            RolesDto rolesDto = new RolesDto();
+
+            log.info("RoleId ******* " + rolesDto.getId());
+
+            rolesDto.setId(roles.getId());
+            rolesDto.setRoleName(roles.getRoleName());
+            rolesDto.setStatus(roles.getStatus());
+
+            log.info("leaveTypeDto ********* " + rolesDto.toString());
+
+            response.add(rolesDto);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    public ResponseEntity<String> updateroles(RolesDto rolesDto) {
+        RolesDto response = new RolesDto();
+        Roles roles = new Roles();
+        Optional<Roles> result = rolesRepository.findById(rolesDto.getId());
+
+        if (result.isPresent() && !result.get().getStatus().equals("Deleted")) {
+
+            roles.setId(rolesDto.getId());
+            roles.setRoleName(rolesDto.getRoleName());
+            roles.setStatus("Active");
+
+            rolesRepository.save(roles);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("desc", MessageConstants.ROLES_UPDATED);
+
+            return new ResponseEntity<String>(MessageConstants.ROLES_UPDATED, headers, HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<String>(MessageConstants.BAD_REQUEST_UPDATE, HttpStatus.BAD_REQUEST);
+            //response.setStatus("Error while updating");
+        }
+        //return response;
+    }
+
+    public ResponseEntity<String> deleteroles(int id) {
+        RolesDto response = new RolesDto();
+        Roles roles = new Roles();
+        Optional<Roles> result = rolesRepository.findById(id);
+
+        if (result.isPresent() && !result.get().getStatus().equals("Deleted")) {
+
+            roles.setId(result.get().getId());
+            roles.setRoleName(result.get().getRoleName());
+            roles.setStatus("Deleted");
+
+            rolesRepository.save(roles);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("desc", MessageConstants.ROLES_DELETED);
+
+            return new ResponseEntity<String>(MessageConstants.LEAVETYPE_DELETED, headers, HttpStatus.OK);
+            //response.setStatus("Roles Deleted Successfully");
+
+        } else {
+            return new ResponseEntity<String>(MessageConstants.BAD_REQUEST_DELETE, HttpStatus.BAD_REQUEST);
+            //response.setStatus("Error while deleting");
+        }
+        //return response;
+    }
+}

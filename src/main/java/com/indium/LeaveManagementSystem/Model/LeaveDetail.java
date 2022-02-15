@@ -1,5 +1,8 @@
 package com.indium.LeaveManagementSystem.Model;
 
+import com.indium.LeaveManagementSystem.DTO.EmployeeDetailsDto;
+import com.indium.LeaveManagementSystem.DTO.LeaveTypeDto;
+import com.indium.LeaveManagementSystem.DTO.RolesDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -48,4 +51,17 @@ public class LeaveDetail {
         Date d = new Date(updatedAt);
         this.updatedAt = d;
     }
+     public void setEmployeeDetails(EmployeeDetailsDto employeeDetailsDto) {
+        EmployeeDetails employeeDetails=new EmployeeDetails();
+        employeeDetails.setEmpId(employeeDetailsDto.getEmpId());
+        this.employeeDetails = employeeDetails;
+    }
+    public void setLeaveType(LeaveTypeDto leaveTypeDto) {
+        LeaveType leaveType=new LeaveType();
+        leaveType.setId(leaveTypeDto.getId());
+        this.leaveType = leaveType;
+    }
+
+
+
 }
